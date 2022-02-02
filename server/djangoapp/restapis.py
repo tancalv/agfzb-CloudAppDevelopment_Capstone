@@ -108,4 +108,21 @@ def analyze_review_sentiments(text):
         label = "Can't recognize review"
         return (label)
 
+def get_only_1_dealer_by_id_from_cf(url, dealerId):
+    results = []
+    url += "?dealership="+str(dealerId)
+    json_request = get_request(url)
+    if json_request:
+        # Get the review list in JSON as reviewers
+        reviewers = json_request["reviews"]
+        # For each reviewer object
+        for reviewer in reviewers:
+            if (reviewer["dealership"] == dealerId):
+                # Create a DealerReview object that matches the dealerId
+                review_obj = DealerReview(dealership=reviewer["dealership"], name=reviewer["name"], purchase=reviewer["purchase"],
+                                         review=reviewer["review"], purchase_date=reviewer["purchase_date"],
+                                         car_make=reviewer["car_make"], car_model=reviewer["car_model"],
+                                        car_year=reviewer["car_year"], sentiment=analyze_review_sentiments(reviewer["review"]), id=reviewer["id"])
+                results.append(review_obj)
 
+    return results

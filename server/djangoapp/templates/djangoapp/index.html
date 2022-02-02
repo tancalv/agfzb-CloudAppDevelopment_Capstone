@@ -10,9 +10,8 @@
     <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
-
+    
 </head>
-
     <body>
       This is the index page of your Django app!
     <!--Add a nav bar here -->
@@ -35,13 +34,45 @@
     </form>
     {% endif %}
 </nav>
-<form action="{% url 'djangoapp:add_review' %}" method="POST">
+<form action="{% url 'djangoapp:add_review' 1 %}" method="GET">
     {% csrf_token %}
     <input type="submit" name="add review"> 
     
-
+   
 </form>
+ 
   <!--Add a dealer table here -->
-    </body>
-
+  <table class="table" id="table" data-filter-control="true">
+    <thead>
+        <tr>
+            <th data-field="id">ID</th>
+            <th data-field="full_name">Name</th>
+            <th data-field="city">City</th>
+            <th data-field="address">Address</th>
+            <th data-field="zip">Zip</th>
+            <th data-field="state" data-filter-control="select">State</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dealer in dealerships %}
+            <tr>
+                <td>{{dealer.id}}</td>
+                <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+                <td>{{dealer.city}}</td>
+                <td>{{dealer.address}}</td>
+                <td>{{dealer.zip}}</td>
+                <td>{{dealer.state}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+ 
+ 
+</body>
+<script>
+    $(function() {
+        $('#table').bootstrapTable()
+    })
+</script>
+ 
 </html>

@@ -91,6 +91,8 @@ class DealerReview:
         self.car_make = car_make
         # Review of the Car Model
         self.car_model = car_model
+        # Review of the Car Year
+        self.car_year = car_year
         # Reviewers sentiments
         self.sentiment = sentiment
         # Reviewers ID

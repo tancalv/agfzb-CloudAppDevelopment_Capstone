@@ -81,32 +81,33 @@ def registration_request(request):
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
+    context={}
     if request.method == "GET":
         url = "https://d1934b55.us-south.apigw.appdomain.cloud/dealership/api/dealership"
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
         # Concat all dealer's short name
         dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
-        # return HttpResponse(dealer_names)
-        return render(request, 'djangoapp/index.html')
+        context["dealerships"] = dealerships
+        return render(request, 'djangoapp/index.html', context)
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
+    context = {}
     if request.method == "GET":
+
         url = "https://d1934b55.us-south.apigw.appdomain.cloud/dealershipReviews/api/review"
         # Get Reviewers from the URL
-        Reviewers = get_dealer_by_id_from_cf(url, dealer_id)
-        # Concat all dealer's short name
-        reviewer_names = ' '.join([reviewer.sentiment for reviewer in Reviewers])
-        # Return a list of dealer short name
-        return HttpResponse(reviewer_names)
+        context["reviews"] = get_dealer_by_id_from_cf(url, dealer_id)
+        context["dealer_id"] = [dealer_id]
+        return render(request, 'djangoapp/dealer_details.html', context)
  
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 # ...
-def add_review(request):
+def add_review(request, dealer_id):
+    context = {}
     if request.method == "POST":
         # username = request.POST['username']
         # password = request.POST['password']
@@ -128,11 +129,17 @@ def add_review(request):
         json_payload = {}
         json_payload["reviews"] = review
         dealer_id = 13
-        return HttpResponse(post_request(url, json_payload, dealer_id=dealer_id))
+        context["reviews"] = ["Test DealerShip Name"]
+        post_request(url, json_payload, dealer_id=dealer_id)
+        return render(request, 'djangoapp/add_review.html', context)
+
         # else:
         #     context['message'] = "Invalid username or password."
         #     return render(request, 'djangoapp/index.html')
     else:
-        return render(request, 'djangoapp/index.html')
+        url = "https://d1934b55.us-south.apigw.appdomain.cloud/dealershipReviews/api/review"
+        # Get Reviewers from the URL
+        context["cars"] = get_dealer_by_id_from_cf(url, dealer_id)
+        return render(request, 'djangoapp/add_review.html', context)
 
 
