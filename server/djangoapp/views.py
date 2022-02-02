@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf, post_request
+from .restapis import get_dealers_from_cf, get_review_by_id_from_cf, post_request, get_dealership_by_id_from_cf 
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -98,7 +98,7 @@ def get_dealer_details(request, dealer_id):
 
         url = "https://d1934b55.us-south.apigw.appdomain.cloud/dealershipReviews/api/review"
         # Get Reviewers from the URL
-        context["reviews"] = get_dealer_by_id_from_cf(url, dealer_id)
+        context["reviews"] = get_review_by_id_from_cf(url, dealer_id)
         context["dealer_id"] = [dealer_id]
         return render(request, 'djangoapp/dealer_details.html', context)
  
@@ -113,7 +113,6 @@ def add_review(request, dealer_id):
         # password = request.POST['password']
         # user = authenticate(username=username, password=password)
         # if user is not None:
-        print("hello")
         url = "https://d1934b55.us-south.apigw.appdomain.cloud/dealershipReviews/api/review"
         review = {}
         review["name"] = "Calvin Tan"
@@ -137,9 +136,11 @@ def add_review(request, dealer_id):
         #     context['message'] = "Invalid username or password."
         #     return render(request, 'djangoapp/index.html')
     else:
-        url = "https://d1934b55.us-south.apigw.appdomain.cloud/dealershipReviews/api/review"
+        url_review = "https://d1934b55.us-south.apigw.appdomain.cloud/dealershipReviews/api/review"
+        url_dealership = "https://d1934b55.us-south.apigw.appdomain.cloud/dealership/api/dealership"
         # Get Reviewers from the URL
-        context["cars"] = get_dealer_by_id_from_cf(url, dealer_id)
+        context["cars"] = get_review_by_id_from_cf(url_review, dealer_id)
+        context["dealerships"] = get_dealership_by_id_from_cf(url_dealership, dealer_id)
         return render(request, 'djangoapp/add_review.html', context)
 
 
