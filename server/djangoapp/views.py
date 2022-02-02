@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf
+from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -88,8 +88,8 @@ def get_dealerships(request):
         # Concat all dealer's short name
         dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
         # Return a list of dealer short name
-        return HttpResponse(dealer_names)
-
+        # return HttpResponse(dealer_names)
+        return render(request, 'djangoapp/index.html')
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
@@ -106,4 +106,33 @@ def get_dealer_details(request, dealer_id):
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 # ...
+def add_review(request):
+    if request.method == "POST":
+        # username = request.POST['username']
+        # password = request.POST['password']
+        # user = authenticate(username=username, password=password)
+        # if user is not None:
+        print("hello")
+        url = "https://d1934b55.us-south.apigw.appdomain.cloud/dealershipReviews/api/review"
+        review = {}
+        review["name"] = "Calvin Tan"
+        review["purchase"] = True
+        review["dealership"] = 1337
+        review["id"] = 37
+        review["review"] = "Not a bad car, but a good one."
+        review["sentiment"] = ""
+        review["purchase_date"] = "02/01/2022"
+        review["car_make"] = "Mercedes"
+        review["car_model"] = "C Class"
+        review["car_year"] = "2025"
+        json_payload = {}
+        json_payload["reviews"] = review
+        dealer_id = 13
+        return HttpResponse(post_request(url, json_payload, dealer_id=dealer_id))
+        # else:
+        #     context['message'] = "Invalid username or password."
+        #     return render(request, 'djangoapp/index.html')
+    else:
+        return render(request, 'djangoapp/index.html')
+
 
