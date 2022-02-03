@@ -119,17 +119,17 @@ def add_review(request, dealer_id):
             review["purchase"] = True
         else:
             review["purchase"] = False
-        review["name"] = request.POST['username']
+        review["name"] = "Calvin"
         review["dealership"] = dealer_id
         review["id"] = 37
-         
-        review["sentiment"] = analyze_review_sentiments(request.POST['context'])
+        review["review"] = request.POST['content']
+        review["sentiment"] = analyze_review_sentiments(request.POST['content'])
         review["purchase_date"] = request.POST['purchasedate']
-         for car_model in CarModel.objects.all():
-            if (car_model.id == request.POST[car.id]):
+        for car_model in CarModel.objects.all():
+            if (car_model.id == int(request.POST["car"])):
                 review["car_make"] = car_model.car_make.name
                 review["car_model"] = car_model.name
-                review["car_year"] = car_model.year
+                review["car_year"] = car_model.year.strftime("%Y")
         json_payload = {}
         json_payload["reviews"] = review
         post_request(url, json_payload, dealer_id=dealer_id)
