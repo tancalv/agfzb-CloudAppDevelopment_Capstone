@@ -13,21 +13,21 @@
     <body>
  
     {% for dealership in dealerships %}
-    <h1>Add a review about {{dealership.full_name}}</h1>
+    <h1 name="{{dealership.full_name}}" id="{{dealership.full_name}}">Add a review about {{dealership.full_name}}</h1>
     <form action="{% url 'djangoapp:add_review' dealership.id%}" method="POST">
         {% csrf_token %}
         <p>Enter the review content:</p>
-        <textarea class="form-control" id="content" name="content" rows="2" required placeholder="This is a great car dealer"></textarea> 
+        <textarea class="form-control" id="content" name="content" rows="2" required placeholder="This is a great car dealer"></textarea> <br>
         <input type="checkbox" name="purchasecheck" id="purchasecheck"> 
         <span>Has purchased the car from {{dealership.full_name}} ?</span><span> (selected purchased car information below if checked) </span> <br>
         <select name="car" id="car" class="form-select" required>
            
                 {% for car in cars %}
-                    <option selected value={{car.id}}>{{car.car_model}}-{{car.car_make}}-{{ car.car_year }}</option>
+                    <option selected value={{car.id}}>{{car.car_make.name}}-{{car.name}}-{{car.year|date:"Y"}}</option>
                 {% endfor %}
            </select> <br> <br>
            <p>Select Your Purchase Date:</p>
-           <input type="text" name="purchasedate" id="purchasedate"> <br> <br>
+           <input type="date" name="purchasedate" id="purchasedate" width=10%> <br> <br>
            <input type="submit" name="submit">
     </form>
     {% endfor %}
