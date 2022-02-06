@@ -47,7 +47,7 @@
         {% csrf_token %}
         <p>Enter the review content:</p>
         <textarea class="form-control" id="content" name="content" rows="2" required placeholder="This is a great car dealer"></textarea> <br>
-        <input type="checkbox" name="purchasecheck" id="purchasecheck"> 
+        <input type="checkbox" name="purchasecheck" id="purchasecheck" required> 
         <span>Has purchased the car from {{dealership.full_name}} ?</span><span> (selected purchased car information below if checked) </span> <br>
         <select name="car" id="car" class="form-select" required>
            
@@ -56,7 +56,7 @@
                 {% endfor %}
            </select> <br> <br>
            <p>Select Your Purchase Date:</p>
-           <input type="date" name="purchasedate" id="purchasedate" width=10%> <br> <br>
+           <input type="date" name="purchasedate" id="purchasedate" width=10% required> <br> <br>
            <input type="submit" name="submit">
     </form>
     {% endfor %}
